@@ -26,24 +26,14 @@ data "aws_subnets" "default" {
   }
 }
 
-# subnets pinned to specific AZs (a1 / a2 as requested)
-data "aws_subnet" "az_a" {
-  vpc_id            = data.aws_vpc.default.id
-  availability_zone = "${var.aws_region}a"
-  default_for_az    = true
-}
-
-data "aws_subnet" "az_b" {
-  vpc_id            = data.aws_vpc.default.id
-  availability_zone = "${var.aws_region}b"
-  default_for_az    = true
-}
-
-# Dynamic, safe subnet selection for the ALB (works no matter how many
-# default AZ subnets actually exist in the account/region - avoids
-# hardcoding a specific AZ like "c" that might not have a default subnet)
+# Dynamic, safe subnet selection - doesn't assume specific AZs (like "a"/"b"/"c")
+# actually have a default subnet in this account. Falls back gracefully if the
+# account only has one default subnet.
 locals {
-  alb_subnet_ids = slice(data.aws_subnets.default.ids, 0, min(3, length(data.aws_subnets.default.ids)))
+  default_subnet_ids = data.aws_subnets.default.ids
+  tomcat1_subnet_id   = local.default_subnet_ids[0]
+  tomcat2_subnet_id   = length(local.default_subnet_ids) > 1 ? local.default_subnet_ids[1] : local.default_subnet_ids[0]
+  alb_subnet_ids      = slice(local.default_subnet_ids, 0, min(3, length(local.default_subnet_ids)))
 }
 
 # RHEL 9 AMI (official Red Hat account)

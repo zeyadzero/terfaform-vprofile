@@ -2,7 +2,8 @@ resource "aws_instance" "tomcat1" {
   ami                    = data.aws_ami.rhel9.id
   instance_type          = var.ec2_instance_type
   key_name               = var.key_name
-  subnet_id              = data.aws_subnet.az_a.id
+  subnet_id              = local.tomcat1_subnet_id
+  associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.backend.id]
 
   root_block_device {
@@ -27,7 +28,8 @@ resource "aws_instance" "tomcat2" {
   ami                    = data.aws_ami.rhel9.id
   instance_type          = var.ec2_instance_type
   key_name               = var.key_name
-  subnet_id              = data.aws_subnet.az_b.id
+  subnet_id              = local.tomcat2_subnet_id
+  associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.backend.id]
 
   root_block_device {

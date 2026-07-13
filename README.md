@@ -70,7 +70,7 @@ terraform output
 | `db_username` / `db_password` | `admin` / `admin123` | weak, fine for a lab, change for anything real |
 | `db_instance_class` | `db.t4g.micro` | |
 | `mq_username` / `mq_password` | `admin` / `admin12345678` | |
-| `mq_instance_type` | `mq.t3.micro` | single-instance broker size — pick your actual size here |
+| `mq_instance_type` | `mq.m7g.medium` | single-instance broker size — `mq.t3.micro` is no longer supported by AWS for new RabbitMQ brokers, only `m7g`/`m5` families |
 | `cache_node_type` | `cache.r7g.large` | this is a large/expensive node type — double-check this is really what you want for a Memcached cache |
 | `cache_num_nodes` | `2` | "node based cluster" as requested — adjust node count as needed |
 | `ec2_instance_type` | `t2.large` | |

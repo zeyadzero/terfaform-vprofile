@@ -29,6 +29,15 @@ resource "aws_lb_target_group" "vprofile" {
     timeout             = 5
   }
 
+  # The app doesn't share sessions/CSRF tokens between tomcat1 and tomcat2,
+  # so without stickiness a login POST can land on a different instance
+  # than the GET that issued the CSRF token, causing 403 errors.
+  stickiness {
+    type            = "lb_cookie"
+    cookie_duration = 3600
+    enabled         = true
+  }
+
   tags = {
     Name = "vprofile"
   }

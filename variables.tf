@@ -5,9 +5,9 @@ variable "aws_region" {
 }
 
 variable "key_name" {
-  description = "EC2 key pair name (po2.pem)"
+  description = "EC2 key pair name"
   type        = string
-  default     = "po2"
+  default     = "po1"
 }
 
 # ---------------- RDS ----------------
@@ -60,9 +60,9 @@ variable "mq_engine_version" {
 }
 
 variable "mq_instance_type" {
-  description = "Single instance broker size"
+  description = "Single instance broker size (AWS no longer supports mq.t3.micro for new RabbitMQ brokers - only m7g/m5 families)"
   type        = string
-  default     = "mq.t3.micro"
+  default     = "mq.m7g.medium"
 }
 
 # ---------------- ElastiCache (Memcached) ----------------
